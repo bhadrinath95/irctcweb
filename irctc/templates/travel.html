@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+{% block head_extra %}
+{% load static %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<link rel='stylesheet' href="{% static 'css\bootstrap.min.css' %}">
+<link rel='stylesheet' href="{% static 'css\jquery-ui.css' %}">
+<link rel='stylesheet' href="{% static 'css\jquery-impromptu.min.css' %}">
+<link rel='stylesheet' href="{% static 'css\optionsaStyles.css' %}">
+{% endblock head_extra %}
+{% block content %}
+<div class='col-sm-6 col-sm-offset-3'>
+<h1 style="color:NAVY;">{{ title }}</h1>
+<hr />
+<form method='POST' action='' enctype='multipart/form-data'>
+{% csrf_token %}
+	<div class="panel panel-primary">
+		<div class="panel-heading"> Travel Details </div>
+		<div class="panel-body">
+				<div class="input-group">
+				{% for field in form %}
+				    <span class="input-group-addon" for="{{ field.name }}">
+				    {% if field.name == 'source' %}
+				    <span class="glyphicon glyphicon-plane"></span>
+				    {% elif field.name == 'destination' %}
+				    <span class="glyphicon glyphicon-record"></span>
+				    {% elif field.name == 'train_number' %}
+				    <span class="glyphicon glyphicon-barcode"></span>
+				    {% elif field.name == 'travel_class' or field.name == 'paymethod' %}
+				    <span class="glyphicon glyphicon-tag"></span>
+				    {% elif field.name == 'travel_date' %}
+				    <span class="glyphicon glyphicon-calendar"></span>
+				    {% elif field.name == 'irctc_username' %}
+				    <span class="glyphicon glyphicon-user"></span>
+				    {% elif field.name == 'irctc_password' or field.name == 'destination_pin' or field.name == 'destination_post_office' or field.name == 'payoption' %}
+				    <span class="glyphicon glyphicon-lock"></span>
+				    {% elif field.name == 'destination_address' or field.name == 'destination_address_2' or field.name == 'destination_address_3' or field.name == 'destination_state' or field.name == 'destination_city' %}
+				    <span class="glyphicon glyphicon-home"></span>
+				    {% endif %}
+				    </span>
+				    {{field}}
+			    {% if field.name == 'destination' %}
+			    </div>
+				<div class="input-group">
+			    {% elif field.name == 'travel_class' %}
+			    </div>
+			    <div class="input-group">
+			    {% elif field.name == 'travel_date' %}
+			    </div>
+			    <br />
+			    <label style="margin-left:5px">IRCTC Credentials</label>
+			    <div class="input-group">
+			    {% elif field.name == 'irctc_password' %}
+			    </div>
+			    <br />
+			    <label style="margin-left:5px">Passenger Destination Address</label>
+			    <div class="input-group">
+			    {% elif field.name == 'destination_address_2' %}
+			    </div>
+			    <div class="input-group">
+			    {% elif field.name == 'destination_pin' %}
+			    </div>
+			    <div class="input-group">
+			    {% elif field.name == 'destination_post_office' %}
+			    </div>
+			    <br />
+			    <label style="margin-left:5px">Payment Details</label>
+			    <div class="input-group">
+			    {% elif field.name == 'paymethod' %}
+			    </div>
+			    {% endif %}
+				{%endfor%} <br />
+		<input type='submit' class='btn btn-primary' value='Book'/>
+		</div>
+	</div>
+</form>
+</div>
+{% endblock content %}
+
+{% block scriptcontent %}
+<script>
+	$(document).ready(function(){
+		$('#id_paymethod').empty();
+		
+		var irctcpaystrings = JSON.parse('{{ json_irctcpay_strings | escapejs }}');
+		var multiplepaystrings = JSON.parse('{{ json_multiplepay_strings | escapejs }}');
+		var debitbankingstrings = JSON.parse('{{ json_debitbanking_strings | escapejs }}');
+		var netbankingstrings = JSON.parse('{{ json_netbanking_strings | escapejs }}');
+		var walletsbankingstrings = JSON.parse('{{ json_walletsbanking_strings | escapejs }}');
+		var podbankingstrings = JSON.parse('{{ json_podbanking_strings | escapejs }}');
+		var gatewaybankingstrings = JSON.parse('{{ json_gatewaybanking_strings | escapejs }}');
+		
+		$('#id_payoption').on('change', function(){
+			var payoption = $('#id_payoption').val();
+			if(payoption == 'IRCTC iPay (Credit Card/Debit Card/UPI)') {
+				$('#id_paymethod').empty();
+				var length = irctcpaystrings.length;
+				var i;
+				for(i=0; i<length; i++) {
+					pay = irctcpaystrings[i];
+					$('#id_paymethod').append(
+						`
+						<option value="${pay}">
+							${pay}
+						</option>
+						`	
+					);
+				}
+			}
+			else if(payoption == 'Multiple Payment Service') {
+				$('#id_paymethod').empty();
+				var length = multiplepaystrings.length;
+				var i;
+				for(i=0; i<length; i++) {
+					pay = multiplepaystrings[i];
+					$('#id_paymethod').append(
+						`
+						<option value="${pay}">
+							${pay}
+						</option>
+						`	
+					);
+				}
+				
+			}
+			else if(payoption == 'Debit Card with PIN') {
+				$('#id_paymethod').empty();
+				var length = debitbankingstrings.length;
+				var i;
+				for(i=0; i<length; i++) {
+					pay = debitbankingstrings[i];
+					$('#id_paymethod').append(
+						`
+						<option value="${pay}">
+							${pay}
+						</option>
+						`	
+					);
+				}
+				
+			}
+			else if(payoption == 'Netbanking') {
+				$('#id_paymethod').empty();
+				var length = netbankingstrings.length;
+				var i;
+				for(i=0; i<length; i++) {
+					pay = netbankingstrings[i];
+					$('#id_paymethod').append(
+						`
+						<option value="${pay}">
+							${pay}
+						</option>
+						`	
+					);
+				}
+				
+			}
+			else if(payoption == 'Wallets / Cash Card') {
+				$('#id_paymethod').empty();
+				var length = walletsbankingstrings.length;
+				var i;
+				for(i=0; i<length; i++) {
+					pay = walletsbankingstrings[i];
+					$('#id_paymethod').append(
+						`
+						<option value="${pay}">
+							${pay}
+						</option>
+						`	
+					);
+				}
+				
+			}
+			else if(payoption == 'Pay-On-Delivery/Pay later') {
+				$('#id_paymethod').empty();
+				var length = podbankingstrings.length;
+				var i;
+				for(i=0; i<length; i++) {
+					pay = podbankingstrings[i];
+					$('#id_paymethod').append(
+						`
+						<option value="${pay}">
+							${pay}
+						</option>
+						`	
+					);
+				}
+				
+			}
+			else if(payoption == 'Payment Gateway / Credit Card / Debit Card') {
+				$('#id_paymethod').empty();
+				var length = gatewaybankingstrings.length;
+				var i;
+				for(i=0; i<length; i++) {
+					pay = gatewaybankingstrings[i];
+					$('#id_paymethod').append(
+						`
+						<option value="${pay}">
+							${pay}
+						</option>
+						`	
+					);
+				}
+				
+			}
+			else {
+				$('#id_paymethod').empty();
+			}
+		})
+	});
+</script>
+{% endblock scriptcontent %}

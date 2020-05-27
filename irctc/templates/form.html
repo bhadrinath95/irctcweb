@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class='col-sm-6 col-sm-offset-3'>
+<h1 style="color:NAVY;">{{ title }}</h1>
+<hr />
+<form method='POST' action='' enctype='multipart/form-data'>
+{% csrf_token %}
+{{ form |crispy }}
+{% if profile_form %}{{ profile_form |crispy }}{% endif %}
+
+<br/>
+<input type='submit' class='btn btn-primary' value='{{ title }}'/>
+</form>
+<br/>
+</div>
+{% endblock content %}

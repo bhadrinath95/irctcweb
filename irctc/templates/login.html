@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block head_extra %}
+{% load static %}
+<link rel='stylesheet' href="{% static 'css\bootstrap.min.css' %}">
+<link rel='stylesheet' href="{% static 'css\jquery-ui.css' %}">
+<link rel='stylesheet' href="{% static 'css\jquery-impromptu.min.css' %}">
+<link rel='stylesheet' href="{% static 'css\optionsaStyles.css' %}">
+
+{% endblock head_extra %}
+{% block content %}
+<div class='col-sm-6 col-sm-offset-3'>
+<h1 style="color:NAVY;">{{ title }}</h1>
+<hr />
+<form method='POST' action='' enctype='multipart/form-data'>
+{% csrf_token %}
+	<div class="panel panel-primary">
+		<div class="panel-heading"> IRCTC Login and Password </div>
+		<div class="panel-body">
+				{% for field in form %}
+				<div class="input-group">
+				    <span class="input-group-addon" for="{{ field.name }}">
+				    {% if field.name == 'username' %}
+				    <span class="glyphicon glyphicon-user"></span>
+				    {% elif field.name == 'password' %}
+				    <span class="glyphicon glyphicon-lock"></span>
+				    {% endif %}
+				    </span>
+				    {{field}}
+				</div>
+				{%endfor%}
+		<br />
+		<input type='submit' class='btn btn-primary' value='{{ title }}'/>
+		</div>
+	</div>
+<br/>
+</form>
+<br/>
+</div>
+{% endblock content %}

@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block head_extra %}
+{% load static %}
+<link rel='stylesheet' href="{% static 'css\bootstrap.min.css' %}">
+<link rel='stylesheet' href="{% static 'css\jquery-ui.css' %}">
+<link rel='stylesheet' href="{% static 'css\jquery-impromptu.min.css' %}">
+<link rel='stylesheet' href="{% static 'css\optionsaStyles.css' %}">
+{% endblock head_extra %}
+{% block content %}
+<div class='col-sm-6 col-sm-offset-3'>
+<h1 style="color:NAVY;">{{ title }}</h1>
+<hr />
+
+<form method='POST' action='' enctype='multipart/form-data'>
+{% csrf_token %}
+{% if person %}
+<div class="panel panel-primary">
+<div class="panel-heading"> Passengers List </div>
+<div class="panel-body">
+	<table>
+	{% for item in person %}
+	<tr>
+		<td>{{ item.person_name }}</td>
+		<td>{{ item.person_age }}</td>
+		<td>{{ item.gender }}</td>
+		<td>{{ item.preference }}</td>
+		<td><button class='btn btn-success' type="submit" name="EditItem" value="{{ item.id }}">Edit</button></td>
+		<td><button class='btn btn-danger' type="submit" name="DropItem" value="{{ item.id }}">Drop</button></td>
+	</tr>
+	{% endfor %}
+	</table><br/>
+<button class='btn btn-primary' type="submit" name="resetItem" value="resetItem">Reset</button>
+</div>
+</div>
+{% endif %}
+</form>
+
+<form method='POST' action='' enctype='multipart/form-data'>
+{% csrf_token %}
+<div class="panel panel-primary">
+	<div class="panel-heading"> Add Passenger </div>
+		<div class="panel-body">
+			<div class="input-group">
+				{% for field in form %}
+					<span class="input-group-addon" for="{{ field.name }}">
+				    {% if field.name == 'person_name' or field.name == 'gender' %}
+				    <span class="glyphicon glyphicon-user"></span>
+				    {% elif field.name == 'preference' %}
+				    <span class="glyphicon glyphicon-tag"></span>
+				    {% elif field.name == 'person_age' %}
+				    <span class="glyphicon glyphicon-lock"></span>
+				    {% elif field.name == 'nationality' %}
+				    <span class="glyphicon glyphicon-home"></span>
+				    {% endif %}
+				    </span>
+				    {{field}}
+				    {% if field.name == 'person_age' %}
+			    	</div>
+					<div class="input-group">
+			    	{% elif field.name == 'preference' %}
+			    	</div>
+			    	<div class="input-group">
+			    	{% elif field.name == 'nationality' %}
+			    	</div>
+			    	{% endif %}
+				{%endfor%} <br />
+				<button class='btn btn-primary' type="submit" name="newItem" value="newItem">Add Passenger</button>
+			</div>
+		</div>
+		<p>Click <a href='{% url "accounts:index" %}'>here!, </a>to go back to booking page!</p>
+</form>
+<form method='POST' action='' enctype='multipart/form-data'>
+{% csrf_token %}
+<button class='btn btn-primary' type="submit", name="selRun", value="selRun">Book</button>
+</form>
+</div>
+{% endblock content %}

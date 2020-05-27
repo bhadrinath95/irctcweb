@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+	<ul>
+		{% for item in person %}
+				<li>{{ item.person_name }}</li>
+		{% endfor %}
+	</ul>
+	<form method='POST' action='' enctype='multipart/form-data'>
+		{% csrf_token %}
+		{{ form |crispy }}
+		<br />
+		<button type="submit", name="newItem", value="newItem">Add Item</button>
+		<button type="submit", name="selRun", value="selRun">Run Selenium</button>
+		<button type="submit", name="resetItem", value="resetItem">Reset</button>
+	</form>
+{% endblock content %}

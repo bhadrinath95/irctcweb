@@ -1,0 +1,11 @@
+#wrapper {
+    width: 300px;
+    height: 250px;
+    padding: 5px;
+}
+
+.btn {
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+    margin-right: 10px;
+    margin-top: 10px;
+}

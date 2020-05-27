@@ -1,0 +1,984 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>TATKAL Autofill Form</title>
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/jquery-ui.css" rel="stylesheet">
+    <link href="assets/css/jquery-impromptu.min.css" rel="stylesheet">
+    <link href="assets/css/optionsaStyles.css" rel="stylesheet">
+</head>
+
+<body class="">
+    <div class="modal fade" id="modal_agree" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                </div>
+                <div class="modal-body">
+                    <p> Our app is a chrome plugin that enables you to book ticket in a seamless manner by auto filling details.</p>
+                    <p> First things first. We do not sell any of your personally identifiable information to anyone and we won't do it ever.</p>
+                    <p>We only store information via Our app and the extension that is related to booking experience. form of information is locally stored on your computer in encrypted format and is not sent to our servers.</p>
+                    <p>No third party has access to the information that you have provided. We might use the information to add additional options to ease your book experience but we do not sell any information to anyone.</p>
+                    <p>We might update the privacy policy for certain reasons. In case that is done it would be clearly stated on the our website would be updated.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="disagree" class="btn btn-default " data-dismiss="modal">I dis agree</button>
+                    <button type="button" id="agree" class="btn btn-primary " data-dismiss="modal">I agree & continue </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="loading" class="overlay_trans">
+        <img style="width:60px" src="assets/css/images/ajax-loader.gif" alt="">
+    </div>
+    <div class=" text-right panel-body" style="background-color: #f1d274;">
+        <h2><img src="icon/icon128.png" width="50"><b class="bg-primary" style="background:DARKBLUE">TURBO<br></b><small class="text-capitalize">
+                <h4><b style="color:black">FAST tatkal ticket booking</b></h4>
+            </small></h2>
+        <div> Version <span style="color:red" id="version"></span>
+        </div>
+    </div>
+    <div class="container" style="background-color:#80b5b3">
+        <section class="row">
+            <div class="col-md-12">
+                <div class="panel panel-primary">
+                    <div class="panel-body">
+                        <label class="text-capitalize">automation</label>
+                        <div class="">
+                            <div class="onoffswitch " style="margin-top:5px;margin-bottom:20px">
+                                <input type="checkbox" name="onOffSwitch" class="onoffswitch-checkbox" id="onOffSwitch">
+                                <label class="onoffswitch-label" for="onOffSwitch">
+                                    <span class="onoffswitch-inner"></span>
+                                    <span class="onoffswitch-switch"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="input-group" style="margin-top:5px">
+                            <input type="checkbox" id="terms">
+                            <label style="margin-left:5px"> I have read and accepted <a id="accept"> Terms & Conditions </a>
+                            </label>
+                        </div>
+                        <div class="panel-body text-center">
+                            <div class="btn-group  hidden" id="groupbtn">
+                                <button type="button" class="btn btn-primary" id="book_ticket">Login IRCTC</button>
+                                <button type="button" class="btn btn-primary" id="tkttips">Tips</button>
+                                <button type="button" class="btn btn-primary text-right" id="ans_clear">Question Answer Clear</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="row">
+            <div class="col col-sm-6">
+                <div class="panel panel-primary">
+                    <div class="panel-heading"> Travel Details </div>
+                    <div class="panel-body">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="fromStationGlyphicon"><span class="glyphicon glyphicon-plane"></span></span>
+                            <input type="text" id="fromStation" class="form-control" placeholder="From Station" aria-describedby="fromStationGlyphicon">
+                            <span class="input-group-addon" id="toStationGlyphicon"><span class="glyphicon glyphicon-record"></span></span>
+                            <input type="text" id="toStation" class="form-control" placeholder="To Station" aria-describedby="toStationGlyphicon">
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon" id="trainNumberGlyphicon"><span class="glyphicon glyphicon-barcode"></span></span>
+                            <input type="text" id="trainNumber" class="form-control" placeholder="Train Number" aria-describedby="trainNumberGlyphicon">
+                            <span class="input-group-addon" id="travelClassGlyphicon"><span class="glyphicon glyphicon-tag"></span></span>
+                            <select id="travelClass" class="form-control" aria-describedby="travelClassGlyphico">
+                                <option value="">select class</option>
+                                <option value="SL">Sleeper</option>
+                                <option value="3A">Third AC</option>
+                                <option value="2A">Second AC</option>
+                                <option value="1A">First AC</option>
+                                <option value="CC">Chair Car</option>
+                                <option value="2S">Second Sitting</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon" id="travelDateGlyphicon"><span class="glyphicon glyphicon-calendar"></span></span>
+                            <input type="text" id="travelDate" class="form-control" placeholder="Travel date" autocomplete="off">
+                            <span class="input-group-addon" id="mobileGlyphicon"><span class="glyphicon glyphicon-phone"></span></span>
+                            <input type="number" class="form-control" id="mobile" placeholder="Mobile number" aria-describedby="mobileGlyphicon">
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-tasks"></span></span>
+                            <select name="quota" class="form-control" aria-describedby="travelClassGlyphico">
+                                <option value="">Select Quota</option>
+                                <option value="GN">GENERAL</option>
+                                <option value="SS">LOWER BERTH/SR.CITIZEN</option>
+                                <option value="LD">LADIES</option>
+                                <option value="HP">DIVYAANG</option>
+                                <option value="TQ">TATKAL</option>
+                                <option value="PT">PREMIUM TATKAL</option>
+                            </select>
+                            <span class="input-group-addon" id="boardingStationGlyphicon"><span class="glyphicon glyphicon-plane"></span></span>
+                            <input type="text" id="boardingStation" class="form-control" placeholder="Boarding station(optional)" aria-describedby="boardingStationGlyphicon">
+                        </div>
+                        <div id="farelimitdiv" class="hidden" style="margin-top:10px">
+                            <input id="farelimit" type="number" name="farelimit" placeholder="fare limit" style="width:80px">
+                            <label> stop "Continue Booking" if fare limit excceeded </label>
+                        </div>
+                        <div id="avllimitdiv" class="hidden" style="margin-top:10px">
+                            <input id="avllimit" type="number" placeholder="avail limit" style="width: 80px">
+                            <label>stop "Continue Booking" if available limit excceeded </label>
+                        </div>
+                        <div class="input-group" style="margin-top:5px">
+                            <input type="checkbox" checked="checked" value="onlyConfirmBerths" name="onlyConfirmBerths">
+                            <label style="margin-left:5px"> Book Only if Confirmed Berths are allotted </label>
+                        </div>
+                        <div>
+                            <label style="margin-top:10px"> Do you want to take Travel Insurance (Rs 0.49 / person)? </label>
+                            <label class="control-label">
+                                <input type="radio" name="insu_yes" value="ins_yes" checked>Yes <input type="radio" name="insu_yes" value="ins_no">No </label>
+                        </div>
+                        <div class="input-group" style="margin-top:5px" id="gst_label">
+                            <input type="checkbox" id="gst">
+                            <label style="margin-left:5px">GST Details (Optional)</label>
+                        </div>
+                        <div id="gst_div" class="hidden">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-barcode"></span></span>
+                                <input type="text" id="gstnumber" class="form-control" placeholder="GST Identification Number(GSTIN)">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-user"></span></span>
+                                <input type="text" id="gst_name" class="form-control" placeholder="Name">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-home"></span></span>
+                                <input type="text" id="gst_door_no" class="form-control" placeholder="Flat/Door/Block No.">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-home"></span></span>
+                                <input type="text" id="street_lane" class="form-control" placeholder="Street/Lane (Optional)">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-home"></span></span>
+                                <input type="text" id="area_local" class="form-control" placeholder="Area/Locality (Optional)">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+                                <input type="text" id="pin_number" class="form-control" placeholder="PIN">
+                            </div>
+                        </div>
+                        <div class="input-group" style="margin-top:5px" id="dest_add_label">
+                            <input type="checkbox" id="dest_address" checked="checked">
+                            <label style="margin-left:5px">Passenger Destination Address</label>
+                        </div>
+                        <div id="dest_add_div" class="hidden">
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-home"></span></span>
+                                <input type="text" id="address1" class="form-control" placeholder="Address 1 *">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-home"></span></span>
+                                <input type="text" id="address2" class="form-control" placeholder="Address 2 (Optional)">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-home"></span></span>
+                                <input type="text" id="address3" class="form-control" placeholder="Address 3 (Optional)">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+                                <input type="text" name="pincode" id="add_pin_number" class="form-control" placeholder="PIN *">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-home"></span></span>
+                                <select id="address-City" name="dest-city" class="form-control" disabled>
+                                    <option value="">Select city *</option>
+                                </select>
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-lock"></span></span>
+                                <select id="address-postOffice" name="dest-post-office" class="form-control" disabled>
+                                    <option value="">Post Office *</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="input-group" style="margin-top:5px">
+                            <input type="checkbox" id="auto_continue_passenger" checked="checked">
+                            <label style="margin-left:5px">Auto Click "Continue" On passenger page</label>
+                        </div>
+                        <label style="margin-top:10px; color:red" class="text-capitalize"> travel details save and clear by passenger details button </label>
+                    </div>
+                </div>
+            </div>
+            <div class="col col-sm-3">
+                <div class="panel panel-primary">
+                    <div class="panel-heading"> IRCTC Login and Password </div>
+                    <div class="panel-body">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="userGlyphicon"><span class="glyphicon glyphicon-user"></span></span>
+                            <input type="text" class="form-control" id="username" placeholder="Username" aria-describedby="userGlyphicon">
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon" id="passwordGlyphicon"><span class="glyphicon glyphicon-lock"></span></span>
+                            <input type="Password" class="form-control" id="pass" placeholder="Password" aria-describedby="passwordGlyphicon">
+                        </div>
+                        <input class="control-label" type="checkbox" value="" id="logpassshow">
+                        <label class="text-capitalize "> password hide/show </label>
+                    </div>
+                    <div class="text-right panel-body">
+                        <button type="button" class="btn btn-sm btn-primary" id="loginsave">save</button>
+                        <button type="button" class="btn btn-sm btn-warning" id="loginclear">clear</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col col-sm-3" id="submitdiv" style="display: none;">
+                <div class="panel" style="background:maroon">
+                    <div class="panel-heading">submit form</div>
+                    <div class="panel-body">
+                        <div class="input-group">
+                            <span class="input-group-addon" id="userGlyphicon"><span>da</span></span>
+                            <input type="password" class="form-control" aria-describedby="userGlyphicon" id="todaydate">
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-addon" id="passwordGlyphicon"><span>am<br></span></span>
+                            <input type="Password" class="form-control" id="amount" aria-describedby="passwordGlyphicon">
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <button type="button" class="btn btn-sm btn-danger" id="submit">submit</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col  col-sm-6" id="act_div" style="display:none">
+                <div class="panel  text-capitalize">
+                    <div class="panel-body  bg-warning">
+                        <div class="text-center">
+                            <p>question answer auto fill and payment options will not work for free user</p>
+                            <p> प्रश्न उत्तर ऑटोफिल और पेमेंट ऑटोफिल फ्री यूजर के लिए काम नहीं करेगा</p>
+                        </div>
+                        <div class="row">
+                            <div class="col col-xs-offset-4">
+                                <button type="button" class="btn btn-success" id="payhere">Pay Here</button>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="col-xs-8">
+                            <div class="input-group">
+                                <span class="input-group-addon">@</span>
+                                <input type="text" class="form-control" placeholder="Payment ID / Order ID" id="payment_id">
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <button type="button" class="btn btn-sm btn-link" id="activate" style="background-color:blue;color:white"> activate </button>
+                        </div>
+                        <div id="eng_act_div" class="hidden">
+                            <div class="col-xs-8">
+                                <div class="input-group">
+                                    <span class="input-group-addon">@</span>
+                                    <input type="password" class="form-control" id="activation_id" placeholder="activation ID">
+                                </div>
+                            </div>
+                            <div class="col-xs-3">
+                                <button type="button" class="btn btn-sm btn-link" id="eng_activate" style="background-color:blue;color:white">eng activate</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col  col-sm-5" id="validate_status" style="display:none">
+                <div class="panel text-capitalize">
+                    <div class="panel-body  bg-success text-center">
+                        <div class="center">
+                            <h4 style="color:green;"><b>ALL FEATURES ACTIVATED</b></h4>
+                            <p> validity expires remaining <span style="color:red" id="reamin_days"> </span> days ,</p>
+                            <p> validity period upto :<span style="color:green" id="validity_upto"> </span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="row">
+            <div class="border col-md-7">
+                <div class="panel panel-primary">
+                    <div class="panel-heading text-capitalize">passenger details</div>
+                    <div class="panel-body text-center" style="height:auto;">
+                        <table class="">
+                            <thead class="table-heading">
+                                <tr class="heading-center">
+                                    <th>#</th>
+                                    <th class="text-capitalize">passenger name</th>
+                                    <th class="text-capitalize">age</th>
+                                    <th class="text-capitalize">gender</th>
+                                    <th class="text-capitalize">berth prefer</th>
+                                    <th class="text-capitalize">food choice</th>
+                                    <th class="text-capitalize">snrctzn</th>
+                                    <th class="text-capitalize">berth</th>
+                                </tr>
+                            </thead>
+                            <tbody class="">
+                                <tr id="rowpassenger1" class="">
+                                    <td style="width:20px">1</td>
+                                    <td style="width:25%">
+                                        <input type="text" class="form-control" placeholder="passenger name" id="passengerName0" maxlength="16">
+                                    </td>
+                                    <td style="width:60px">
+                                        <input type="text" class="form-control" placeholder="age" id="passengerAge0">
+                                    </td>
+                                    <td>
+                                        <select class="form-control" id="passengerGender0">
+                                            <option value="">Select</option>
+                                            <option value="F">Female</option>
+                                            <option value="M">Male</option>
+                                            <option value="T">Transgender</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" id="passengerBirthPreference0">
+                                            <option value="">No Preference</option>
+                                            <option value="LB">Lower</option>
+                                            <option value="MB">Middle</option>
+                                            <option value="UB">Upper</option>
+                                            <option value="SL">Side lower</option>
+                                            <option value="SU">Side upper</option>
+                                            <option value="WS">Window Side</option>
+                                        </select>
+                                    </td>
+                                    <td style="width:15%">
+                                        <select class="form-control" id="FoodChoice0">
+                                            <option value="V">Veg</option>
+                                            <option value="N">Non Veg</option>
+                                            <option value="D" selected="selected">No Food</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" id="SRCTZNconcession0">
+                                            <option value="1">Avail Concession</option>
+                                            <option value="2">Forgo 50% Concession</option>
+                                            <option value="3">Forgo Full Concession</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" value="" id="berthopt0" checked="checked">
+                                    </td>
+                                </tr>
+                                <tr id="rowpassenger2" class="">
+                                    <td style="width:20px">2</td>
+                                    <td>
+                                        <input type="text" class="form-control" placeholder="passenger name" id="passengerName1" maxlength="16">
+                                    </td>
+                                    <td style="width:60px">
+                                        <input type="text" class="form-control" placeholder="age" id="passengerAge1">
+                                    </td>
+                                    <td>
+                                        <select class="form-control" id="passengerGender1">
+                                            <option value="">Select</option>
+                                            <option value="F">Female</option>
+                                            <option value="M">Male</option>
+                                            <option value="T">Transgender</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" id="passengerBirthPreference1">
+                                            <option value="">No Preference</option>
+                                            <option value="LB">Lower</option>
+                                            <option value="MB">Middle</option>
+                                            <option value="UB">Upper</option>
+                                            <option value="SL">Side lower</option>
+                                            <option value="SU">Side upper</option>
+                                            <option value="WS">Window Side</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" id="FoodChoice1">
+                                            <option value="V">Veg</option>
+                                            <option value="N">Non Veg</option>
+                                            <option value="D" selected="selected">No Food</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" id="SRCTZNconcession1">
+                                            <option value="1">Avail Concession</option>
+                                            <option value="2">Forgo 50% Concession</option>
+                                            <option value="3">Forgo Full Concession</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" value="" id="berthopt1" checked="checked">
+                                    </td>
+                                </tr>
+                                <tr id="rowpassenger3" class="">
+                                    <td style="width:20px">3</td>
+                                    <td>
+                                        <input type="text" class="form-control" placeholder="passenger name" id="passengerName2" maxlength="16">
+                                    </td>
+                                    <td style="width:60px">
+                                        <input type="text" class="form-control" placeholder="age" id="passengerAge2">
+                                    </td>
+                                    <td>
+                                        <select class="form-control" id="passengerGender2">
+                                            <option value="">Select</option>
+                                            <option value="F">Female</option>
+                                            <option value="M">Male</option>
+                                            <option value="T">Transgender</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" id="passengerBirthPreference2">
+                                            <option value="">No Preference</option>
+                                            <option value="LB">Lower</option>
+                                            <option value="MB">Middle</option>
+                                            <option value="UB">Upper</option>
+                                            <option value="SL">Side lower</option>
+                                            <option value="SU">Side upper</option>
+                                            <option value="WS">Window Side</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" id="FoodChoice2">
+                                            <option value="V">Veg</option>
+                                            <option value="N">Non Veg</option>
+                                            <option value="D" selected="selected">No Food</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" id="SRCTZNconcession2">
+                                            <option value="1">Avail Concession</option>
+                                            <option value="2">Forgo 50% Concession</option>
+                                            <option value="3">Forgo Full Concession</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" value="" id="berthopt2" checked="checked">
+                                    </td>
+                                </tr>
+                                <tr id="rowpassenger4" class="">
+                                    <td style="width:20px">4</td>
+                                    <td>
+                                        <input type="text" class="form-control" placeholder="passenger name" id="passengerName3" maxlength="16">
+                                    </td>
+                                    <td style="width:60px">
+                                        <input type="text" class="form-control" placeholder="age" id="passengerAge3">
+                                    </td>
+                                    <td>
+                                        <select class="form-control" id="passengerGender3">
+                                            <option value="">Select</option>
+                                            <option value="F">Female</option>
+                                            <option value="M">Male</option>
+                                            <option value="T">Transgender</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" id="passengerBirthPreference3">
+                                            <option value="">No Preference</option>
+                                            <option value="LB">Lower</option>
+                                            <option value="MB">Middle</option>
+                                            <option value="UB">Upper</option>
+                                            <option value="SL">Side lower</option>
+                                            <option value="SU">Side upper</option>
+                                            <option value="WS">Window Side</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" id="FoodChoice3">
+                                            <option value="V">Veg</option>
+                                            <option value="N">Non Veg</option>
+                                            <option value="D" selected="selected">No Food</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" id="SRCTZNconcession3">
+                                            <option value="1">Avail Concession</option>
+                                            <option value="2">Forgo 50% Concession</option>
+                                            <option value="3">Forgo Full Concession</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" value="" id="berthopt3" checked="checked">
+                                    </td>
+                                </tr>
+                                <tr id="rowpassenger5" class="">
+                                    <td style="width:20px">5</td>
+                                    <td>
+                                        <input type="text" class="form-control" placeholder="passenger name" id="passengerName4" maxlength="16">
+                                    </td>
+                                    <td style="width:60px">
+                                        <input type="text" class="form-control" placeholder="age" id="passengerAge4">
+                                    </td>
+                                    <td>
+                                        <select class="form-control" id="passengerGender4">
+                                            <option value="">Select</option>
+                                            <option value="F">Female</option>
+                                            <option value="M">Male</option>
+                                            <option value="T">Transgender</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" id="passengerBirthPreference4">
+                                            <option value="">No Preference</option>
+                                            <option value="LB">Lower</option>
+                                            <option value="MB">Middle</option>
+                                            <option value="UB">Upper</option>
+                                            <option value="SL">Side lower</option>
+                                            <option value="SU">Side upper</option>
+                                            <option value="WS">Window Side</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" id="FoodChoice4">
+                                            <option value="V">Veg</option>
+                                            <option value="N">Non Veg</option>
+                                            <option value="D" selected="selected">No Food</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" id="SRCTZNconcession4">
+                                            <option value="1">Avail Concession</option>
+                                            <option value="2">Forgo 50% Concession</option>
+                                            <option value="3">Forgo Full Concession</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" value="" id="berthopt4" checked="checked">
+                                    </td>
+                                </tr>
+                                <tr id="rowpassenger6" class="">
+                                    <td style="width:20px">6</td>
+                                    <td>
+                                        <input type="text" class="form-control" placeholder="passenger name" id="passengerName5" maxlength="16">
+                                    </td>
+                                    <td style="width:60px">
+                                        <input type="text" class="form-control" placeholder="age" id="passengerAge5">
+                                    </td>
+                                    <td>
+                                        <select class="form-control" id="passengerGender5">
+                                            <option value="">Select</option>
+                                            <option value="F">Female</option>
+                                            <option value="M">Male</option>
+                                            <option value="T">Transgender</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" id="passengerBirthPreference5">
+                                            <option value="">No Preference</option>
+                                            <option value="LB">Lower</option>
+                                            <option value="MB">Middle</option>
+                                            <option value="UB">Upper</option>
+                                            <option value="SL">Side lower</option>
+                                            <option value="SU">Side upper</option>
+                                            <option value="WS">Window Side</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" id="FoodChoice5">
+                                            <option value="V">Veg</option>
+                                            <option value="N">Non Veg</option>
+                                            <option value="D" selected="selected">No Food</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select class="form-control" id="SRCTZNconcession5">
+                                            <option value="1">Avail Concession</option>
+                                            <option value="2">Forgo 50% Concession</option>
+                                            <option value="3">Forgo Full Concession</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <input type="checkbox" value="" id="berthopt5" checked="checked">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="text-right panel-body">
+                        <button type="button" class="btn btn-primary btn-sm" id="trvlpasngrsave">save</button>
+                        <button type="button" class="btn btn-warning btn-sm" id="trvlpasngrclear">clear</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5" id="payment_div">
+                <div class="panel panel-primary">
+                    <div class="panel-heading text-capitalize"> payment options </div>
+                    <div class="panel-body text-capitalize">
+                        <div>
+                            <input type="checkbox" value="autopay" name="autopayment">
+                            <label>auto click "pay/submit" last step of payment page</label>
+                        </div>
+                        <label class="text-capitalize">payment mode:</label>
+                        <select name="" id="paymentmode" class="btn btn-primary paymentButton" style="background:darkgreen">
+                            <option value="">Select</option>
+                            <option value="irctcpayBtn"> IRCTC iPay (Credit Card/Debit Card/UPI) </option>
+                            <option value="netBankingBtn"> Net Banking </option>
+                            <option value="debitCardBtn"> Debit Card with PIN </option>
+                            <option value="cashCardBtn"> Wallets/ Cash Cards </option>
+                            <option value="paylaterBtn"> Pay-On-Delivery/Pay later </option>
+                            <option value="CreditDebitbtn"> Payment Gateway / Credit Card / Debit Card </option>
+                            <option value="bhimbtn"> BHIM/ UPI/ USSD </option>
+                            <option value="nultiple_pay_btn"> Multiple Payment Service </option>
+                        </select>
+                        <div id="netBankingOptions" style="display:none">
+                            <div id="netbankselection">
+                                <label>Select Gateway :</label>
+                                <select name="PAYMENT" id="netbankingactive" class="btn btn-primary paymentButton" style="background:darkgreen">
+                                    <option value="NETBANKING-1">State Bank of India</option>
+                                    <option value="NETBANKING-28">Union Bank of India</option>
+                                    <option value="NETBANKING-38">Vijaya Bank</option>
+                                    <option value="NETBANKING-37">Bank of Baroda</option>
+                                    <option value="NETBANKING-40">Karur Vysya Bank</option>
+                                    <option value="NETBANKING-45">IndusInd Bank</option>
+                                    <option value="NETBANKING-54">Syndicate Bank</option>
+                                    <option value="NETBANKING-60">Yes Bank</option>
+                                    <option value="NETBANKING-81">Canara Bank</option>
+                                    <option value="NETBANKING-22">Federal Bank</option>
+                                    <option value="NETBANKING-34">Punjab National Bank</option>
+                                    <option value="NETBANKING-39"> AXIS Bank</option>
+                                    <option value="NETBANKING-42"> Karnataka Bank</option>
+                                    <option value="NETBANKING-46"> Kotak Mahindra Bank</option>
+                                    <option value="NETBANKING-50"> Central Bank of India</option>
+                                    <option value="NETBANKING-53"> Bank of Maharashatra</option>
+                                    <option value="NETBANKING-64"> Nepal SBI Bank Ltd. </option>
+                                    <option value="NETBANKING-80"> City Union Bank</option>
+                                    <option value="NETBANKING-29"> Indian Bank</option>
+                                    <option value="NETBANKING-35"> Allahabad Bank</option>
+                                    <option value="NETBANKING-36"> HDFC Bank</option>
+                                    <option value="NETBANKING-43">Oriental Bank of Commerce </option>
+                                    <option value="NETBANKING-44">ICICI Bank </option>
+                                    <option value="NETBANKING-48">Bank of India </option>
+                                    <option value="NETBANKING-56">Corporation Bank </option>
+                                    <option value="NETBANKING-67"> South Indian Bank</option>
+                                    <option value="NETBANKING-103">Airtel Payments Bank </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="debitCardOptions" style="display:none">
+                            <div id="debitcardselection">
+                                <label>Select Gateway :</label>
+                                <select name="PAYMENT" id="debitcardactive" class="btn btn-primary paymentButton" style="background:darkgreen">
+                                    <option value="DEBIT_CARD-3">State Bank of India</option>
+                                    <option value="DEBIT_CARD-57">HDFC Bank</option>
+                                    <option value="DEBIT_CARD-5"> Indian Overseas Bank</option>
+                                    <option value="DEBIT_CARD-66">AXIS Bank</option>
+                                    <option value="DEBIT_CARD-86">United Bank of India</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="cashCardOptions" style="display:none">
+                            <div id="cashcardselection">
+                                <label>Select Gateway :</label>
+                                <select name="PAYMENT" id="cashcardactive" class="btn btn-primary paymentButton" style="background:darkgreen">
+                                    <option value="CASH_CARD-55">Oxigen Wallet</option>
+                                    <option value="CASH_CARD-79">Freecharge Wallet</option>
+                                    <option value="CASH_CARD-93">Airtel Money</option>
+                                    <option value="CASH_CARD-68">Mobikwik Wallet</option>
+                                    <option value="CASH_CARD-75">SBI Buddy</option>
+                                    <option value="CASH_CARD-102">I Cash Card</option>
+                                    <option value="CASH_CARD-71">Paytm Wallet</option>
+                                    <option value="CASH_CARD-85">OLAMONEY Wallet</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="collapse" id="razorpayoptions">
+                            <div id="razorpayselection">
+                                <label>Select Gateway :</label>
+                                <select name="PAYMENT" id="razorpayactive" class="btn btn-primary paymentButton" style="background:darkgreen">
+                                    <option value="AGGREGATOR-105-SBINET"> Razorpay SBI netbank</option>
+                                    <option value="AGGREGATOR-105-HDFCNET"> Razorpay HDFC netbank</option>
+                                    <option value="AGGREGATOR-105-ICICINET"> Razorpay ICICI netbank</option>
+                                    <option value="AGGREGATOR-105-SBIDEBIT"> Razorpay SBI debit</option>
+                                    <option value="AGGREGATOR-105-HDFCDEBIT"> Razorpay HDFC debit</option>
+                                    <option value="AGGREGATOR-105-ICICIDEBIT"> Razorpay ICICI debit</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="creditdebitoptions" style="display:none">
+                            <div id="creditdebitselection">
+                                <label>Select Gateway :</label>
+                                <select name="PAYMENT" id="creditdebitactive" class="btn btn-primary paymentButton" style="background:darkgreen">
+                                    <option value="CREDIT_CARD-17"> Visa/Master Card(Powered By CITI BANK) </option>
+                                    <option value="CREDIT_CARD-58"> RuPay Card (Powered by Kotak Bank) </option>
+                                    <option value="CREDIT_CARD-21"> Visa/Master Card(Powered By HDFC BANK) </option>
+                                    <option value="CREDIT_CARD-30"> Visa/Master Card(Powered By AXIS BANK) </option>
+                                    <option value="CREDIT_CARD-115"> Visa/Master Card(Powered By ICICI BANK) </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="hdfc_credit_debit_options" style="display:none">
+                            <div id="hdfc_creditdebitselection">
+                                <select name="hdfc_payment" id="hdfc_creditdebitactive" class="btn btn-primary paymentButton">
+                                    <option value="hdfc_credit"> HDFC BANK CREDIT CARD </option>
+                                    <option value="hdfc_debit"> HDFC BANK DEBIT CARD </option>
+                                    <option value="other_credit"> OTHER BANK CREDIT CARD </option>
+                                    <option value="other_debit"> OTHER BANK DEBIT CARD </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="BHIM_UPI_USSD_options" style="display:none">
+                            <select name="PAYMENT" id="BHIM_UPI_USSD_active" class="btn btn-primary paymentButton" style="background:darkgreen">
+                                <option value="UPI_VPA-96"> Pay using BHIM (Powered by HDFC BANK) also accepts UPI </option>
+                                <option value="UPI_VPA-97"> Pay using BHIM (Powered by AXIS BANK) also accepts UPI </option>
+                                <option value="UPI_VPA-117"> Pay using BHIM (Powered by PAYTM ) also accepts UPI </option>
+                            </select>
+                            <div class="input-group">
+                                <span class="input-group-addon" id="userGlyphicon"><span class="glyphicon glyphicon-user"> </span></span>
+                                <input type="text" class="form-control" id="BHIM_vpa" placeholder="Virtual Private Account" aria-describedby="userGlyphicon">
+                            </div>
+                        </div>
+                        <div id="Multiple_Payment_options" style="display:none">
+                            <label>Select Gateway :</label>
+                            <select name="PAYMENT" id="Multiple_Payment_active" class="btn btn-primary paymentButton" style="background:darkgreen">
+                                <option value="AGGREGATOR-78"> Credit &amp; Debit cards / Net Banking / Wallet (Powered by Paytm) </option>
+                                <option value="AGGREGATOR-98"> Credit &amp; Debit cards / Net Banking / Wallet (Powered by PayU) </option>
+                                <option value="AGGREGATOR-123"> Amazon Pay Wallet (Powered by Amazon) </option>
+                            </select>
+                            <select id="Multiple_Payment_mode_select" class="btn btn-primary paymentButton">
+                                <option value="multiple_netbanking"> Net Banking </option>
+                                <option value="multiple_credit_card"> Credit Card </option>
+                                <option value="multiple_debit_card"> Debit Card</option>
+                            </select>
+                            <select id="Multiple_Payment_netbanking" class="btn btn-primary paymentButton hidden">
+                                <option value="">Select Bank</option>
+                                <option value="ICICI"> ICICI Bank</option>
+                                <option value="NKMB"> Kotak Bank</option>
+                                <option value="ANDB"> Andhra Bank</option>
+                                <option value="BBK"> Bank of Bahrain and Kuwait</option>
+                                <option value="BBL"> Bandhan Bank Ltd</option>
+                                <option value="BHARAT"> Bharat Bank</option>
+                                <option value="BOM"> Bank of Maharashtra</option>
+                                <option value="CSB"> Catholic Syrian Bank</option>
+                                <option value="COSMOS"> Cosmos Bank</option>
+                                <option value="DEUTS"> Deutsche Bank</option>
+                                <option value="DCB"> DCB Bank Ltd.</option>
+                                <option value="DENA"> Dena Bank</option>
+                                <option value="DHAN"> Dhanlaxmi Bank</option>
+                                <option value="GPPB"> Gopinath Patil Parsik Janata Sahakari Bank Ltd.</option>
+                                <option value="IDBI"> IDBI Bank</option>
+                                <option value="IDFC"> IDFC Bank Ltd.</option>
+                                <option value="IOB"> Indian Overseas Bank</option>
+                                <option value="JKB"> Jammu and Kashmir Bank</option>
+                                <option value="JSB"> Janata Sahakari Bank</option>
+                                <option value="LVB"> Lakhsmi Vilas Bank</option>
+                                <option value="PMCB"> Punjab and Maharashtra Co-operative Bank Ltd</option>
+                                <option value="PSB"> Punjab and Sind Bank</option>
+                                <option value="RATN"> RBL Bank</option>
+                                <option value="SVB"> Shamrao Vithal Bank</option>
+                                <option value="STB"> Saraswat Co-operative Bank Ltd</option>
+                                <option value="SCB"> Standard Chartered Bank</option>
+                                <option value="SVC"> SVC Cooperative Bank Ltd</option>
+                                <option value="TNMB"> Tamilnad Mercantile Bank</option>
+                                <option value="USFB"> Ujjivan Small Finance Bank</option>
+                                <option value="UBI"> United Bank of India</option>
+                                <option value="UCO"> UCO Bank</option>
+                                <option value="DBS"> DBS BANK LTD</option>
+                            </select>
+                        </div>
+                        <label class="control-label hidden" id="citi_creditdebit">
+                            <label class="control-label">
+                                <input type="radio" name="opt_mode" value="citi_credit_debit" checked>Citibank Credit / Debit Card <input type="radio" name="opt_mode" value="other_credit_debit">Other Bank Credit / Debit Card </label>
+                        </label>
+                        <label class="control-label hidden" id="sbi_net_mode">
+                            <input type="radio" name="loginmode" value="retail" checked> PERSONAL BANKING <input type="radio" name="loginmode" value="corporate"> CORPORATE BANKING </label>
+                        <div id="paylateroptions" style="display:none">
+                            <div id="paylaterselection">
+                                <label>Select Gateway :</label>
+                                <select name="PAYMENT" id="paylateractive" class="btn btn-primary paymentButton" style="background:darkgreen">
+                                    <option value="PAY_LATER-100"> ePaylater (Powered by Arthashastra Fintech Pvt. Ltd.) </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="irctc_ipay_options" class="hidden">
+                            <div id="irctc_ipay_selection">
+                                <label>Select Gateway :</label>
+                                <select name="PAYMENT" id="irctc_ipay_active" class="btn btn-primary paymentButton" style="background:darkgreen">
+                                    <option value="IRCTC_IPAY-113"> Credit cards/ Debit cards / UPI (Powered by IRCTC) </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div id="irctc_credit_debit_options" class="hidden">
+                            <div id="irctc_creditdebitselection">
+                                <select name="irctc_ipay_payment" id="irctc_creditdebitactive" class="btn btn-primary paymentButton">
+                                    <option value="creditLi"> Credit Card </option>
+                                    <option value="debitLi"> Debit Card </option>
+                                    <option value="upiLi"> UPI </option>
+                                    <option value="iMudraLi"> IRCTC IMUDRA </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="collapse" id="irctcPrepaidOptions"> </div>
+                        <div class="collapse" id="MultiplePaymentoptions"> </div>
+                        <br>
+                        <div id="irctc_upi" class="hidden">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="userGlyphicon"><span class="glyphicon glyphicon-user"> </span></span>
+                                <input type="text" class="form-control" id="irctc_vpa" placeholder="Virtual Payment Address" aria-describedby="userGlyphicon">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon" id="userGlyphicon"><span class="glyphicon glyphicon-lock"> </span></span>
+                                <input type="text" class="form-control" id="vpa_name" placeholder="Name" aria-describedby="userGlyphicon">
+                            </div>
+                        </div>
+                        <div role="" id="usernamepass" align="center" style="margin-bottom:10px;display:none">
+                            <div class="modal-body">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="userGlyphicon"><span class="glyphicon glyphicon-user"> </span></span>
+                                    <input type="text" class="form-control" id="netBankingUsername" placeholder="Netbanking Username" aria-describedby="userGlyphicon">
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="passwordGlyphicon"><span class="glyphicon glyphicon-lock"> </span></span>
+                                    <input type="password" class="form-control" id="netBankingPassword" placeholder="Password" aria-describedby="passwordGlyphicon">
+                                </div>
+                            </div>
+                        </div>
+                        <div role="" id="mobnopass" align="center" style="margin-bottom:10px;display:none">
+                            <div class="modal-body">
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="userGlyphicon"><span class="glyphicon glyphicon-user"> </span></span>
+                                    <input type="text" class="form-control" id="cashcardusername" placeholder="mobile / email id" aria-describedby="userGlyphicon">
+                                </div>
+                                <div class="input-group">
+                                    <span class="input-group-addon" id="passwordGlyphicon"><span class="glyphicon glyphicon-lock"> </span></span>
+                                    <input type="password" class="form-control" id="cashcardPassword" placeholder="Password / pin" aria-describedby="passwordGlyphicon">
+                                </div>
+                            </div>
+                        </div>
+                        <div id="mobno_otp" style="display:none">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="userGlyphicon"><span class="glyphicon glyphicon-user"> </span></span>
+                                <input type="text" maxlength="10" class="form-control" id="paylatermob" placeholder="mob no" aria-describedby="userGlyphicon">
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon" id="passwordGlyphicon"><span class="glyphicon glyphicon-lock"> </span></span>
+                                <input type="password" class="form-control" id="paylaterotp" placeholder="otp (optional)" aria-describedby="passwordGlyphicon">
+                            </div>
+                        </div>
+                        <div align="center" id="debitcardsection" style="margin-bottom:10px;display:none">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <section class="row" style="padding-left: 40px">
+                                        <div id="cardTypeWrapper" class="col col-md-4 col-sm-4 col-lg-4 hidden" style="padding-top:20px;">
+                                            <div class="input-group">
+                                                <label for="cardType">Card Type Visa/MasterCard</label>
+                                                <select id="cardType" class="form-control">
+                                                    <option value="VISA|1">VISA Debit/Credit</option>
+                                                    <option value="MC|1">MasterCard</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col col-sm-7 col-md-7 col-lg-7" style="padding-top:20px;">
+                                            <div class="input-group">
+                                                <label style="width:100%">Card Number</label>
+                                                <div class="col col-sm-12 col-xs-12" style="padding:0px;">
+                                                    <input type="text" class="form-control" id="cardNumberConsolidated" placeholder="Card Number" maxlength="19">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                    <section class="row" style="padding-left: 40px;">
+                                        <div class="col col-sm-5 col-md-5 col-lg-5" style="padding-top:10px;">
+                                            <div class="input-group">
+                                                <label style="width:100%">Expiry Date</label>
+                                                <div class="col col-sm-6 col-xs-6" style="padding:0px;">
+                                                    <select id="cardExpiryMonth" class="form-control">
+                                                        <option value="01">01</option>
+                                                        <option value="02">02</option>
+                                                        <option value="03">03</option>
+                                                        <option value="04">04</option>
+                                                        <option value="05">05</option>
+                                                        <option value="06">06</option>
+                                                        <option value="07">07</option>
+                                                        <option value="08">08</option>
+                                                        <option value="09">09</option>
+                                                        <option value="10">10</option>
+                                                        <option value="11">11</option>
+                                                        <option value="12">12</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col col-sm-6 col-xs-6" style="padding:0px;">
+                                                    <select id="cardExpiryYear" class="form-control">
+                                                        <option value="2016">2016</option>
+                                                        <option value="2017">2017</option>
+                                                        <option value="2018">2018</option>
+                                                        <option value="2019">2019</option>
+                                                        <option value="2020">2020</option>
+                                                        <option value="2021">2021</option>
+                                                        <option value="2022">2022</option>
+                                                        <option value="2023">2023</option>
+                                                        <option value="2024">2024</option>
+                                                        <option value="2025">2025</option>
+                                                        <option value="2026">2026</option>
+                                                        <option value="2027">2027</option>
+                                                        <option value="2028">2028</option>
+                                                        <option value="2029">2029</option>
+                                                        <option value="2030">2030</option>
+                                                        <option value="2031">2031</option>
+                                                        <option value="2032">2032</option>
+                                                        <option value="2033">2033</option>
+                                                        <option value="2034">2034</option>
+                                                        <option value="2035">2035</option>
+                                                        <option value="2036">2036</option>
+                                                        <option value="2037">2037</option>
+                                                        <option value="2038">2038</option>
+                                                        <option value="2039">2039</option>
+                                                        <option value="2040">2040</option>
+                                                        <option value="2041">2041</option>
+                                                        <option value="2042">2042</option>
+                                                        <option value="2043">2043</option>
+                                                        <option value="2044">2044</option>
+                                                        <option value="2045">2045</option>
+                                                        <option value="2046">2046</option>
+                                                        <option value="2047">2047</option>
+                                                        <option value="2048">2048</option>
+                                                        <option value="2049">2049</option>
+                                                        <option value="2050">2050</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col col-sm-6 col-md-6 col-lg-6" style="padding-top:10px;">
+                                            <div class="input-group">
+                                                <label style="width:100%">Name on Card</label>
+                                                <div class="col col-md-12 col-sm-12 col-xs-12" style="padding:0px;">
+                                                    <input type="text" class="form-control" id="nameOnCard" placeholder="Name as on Card">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                    <section class="row" style="padding-left: 40px;">
+                                        <div id="cvvWrapper" class="col col-sm-5 col-md-5 col-lg-5 hidden" style="padding-top:10px;">
+                                            <div class="input-group">
+                                                <label style="width:100%">CVV</label>
+                                                <div class="col col-md-12 col-sm-12 col-xs-12" style="padding:0px;">
+                                                    <input type="password" class="form-control" id="cvv" placeholder="XXX" maxlength="3">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="atmPinWrapper" class="col col-sm-6 col-md-6 col-lg-6" style="padding-top:10px;">
+                                            <div class="input-group">
+                                                <label style="width:100%">ATM Pin</label>
+                                                <div class="col col-md-12 col-sm-12 col-xs-12" style="padding:0px;">
+                                                    <input type="password" class="form-control" id="atmPin" placeholder="XXXX" maxlength="4">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div id="card_password_Wrapper" class="col col-sm-6 col-md-6 col-lg-6 hidden" style="padding-top:10px;">
+                                            <div class="input-group">
+                                                <label style="width:100%">password (optional)</label>
+                                                <div class="col col-md-12 col-sm-12 col-xs-12" style="padding:0px;">
+                                                    <input type="password" class="form-control" id="card_password" placeholder="XXXX">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <input class="control-label" type="checkbox" value="" id="pin_password">
+                        <label class="text-capitalize "> password or pin hide/show </label>
+                    </div>
+                    <div class="text-right panel-body">
+                        <button type="button" class="btn btn-sm btn-primary" id="paymentsave">save</button>
+                        <button type="button" class="btn btn-sm btn-warning" id="paymentclear">clear</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <script src="assets/js/jquery-2.1.4.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/jquery-ui.min.js"></script>
+    <script src="assets/js/aes.js"></script>
+    <script src="assets/js/jquery-impromptu.min.js"></script>
+    <script src="assets/js/imprint.js"></script>
+    <script src="assets/js/stationsListFullname.js"></script>
+    <script src="assets/js/trainlist.js"></script>
+    <script src="assets/js/optionseFunctions.js"></script>
+    <script src="assets/js/optionsd.js"></script>
+    <script src="assets/js/ivation.js"></script>
+</body>
+
+</html>
